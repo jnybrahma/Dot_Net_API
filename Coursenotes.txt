@@ -388,6 +388,21 @@ DROP DotNetCourseDatabase
 
 SELECT * FROM TutorialAppSchema.Computer
 
+--------------------------------------
+
+USE DotNetCourseDatabase
+Go
+
+TRUNCATE TABLE  TutorialAppSchema.Computer
+
+
+SELECT * FROM TutorialAppSchema.Computer
+
+
+-----------------------------------------------------
+
+
+
 ## Adding Dapper , Sql , Entity framework  package
 
 (base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet add package Dapper
@@ -401,6 +416,10 @@ SELECT * FROM TutorialAppSchema.Computer
 (base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet add package microsoft.Extensions.Configuration
 
 (base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet add package microsoft.Extensions.Configuration.Json
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet add package Newtonsoft.Json
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet add package AutoMapper
 
 (base) PS D:\Udemy_Course\dotNet_With_SQL\projects\models> dotnet restore
 
@@ -487,6 +506,9 @@ namespace EntityFramework.Data
 >> git remote add origin https://github.com/jnybrahma/MS_DotNet_EntityFramework.git
 >> git push -u origin master
 
+USE DotNetCourseDatabase
+
+SELECT * FROM TutorialAppSchema.Computer
 
 ## File Read and Write: 
 
@@ -500,23 +522,474 @@ namespace EntityFramework.Data
 ## JSON:
 
 
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\JsonReadWrite> dotnet add package Newtonsoft.Json
+
+
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\JsonReadWrite> dotnet add package AutoMapper
+
+
+USE DotNetCourseDatabase
+Go
+
+TRUNCATE TABLE  TutorialAppSchema.Computer
+
+
+SELECT * FROM TutorialAppSchema.Computer
+
+
+USE DotNetCourseDatabase
+Go
+SELECT * FROM TutorialAppSchema.Computer
+
 ## Model Mapping;
+
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\JsonReadWrite> dotnet add package AutoMapper
 
 
 
 %--------------------------------------------- Section 4: SQL Seed -----------------------------------------------------%
 
+This can be done by executing the following in Azure Data Studio after connecting to your SQL Server:
+
+CREATE DATABASE DotNetCourseDatabase;
+GO
+ 
+USE DotNetCourseDatabase;
+GO
+ 
+CREATE SCHEMA TutorialAppSchema;
+GO
+
+-----------------------------------------------------------------
+
+MacOS and Linux Users
+
+
+In the next lecture, and lectures to come, we will be using "Windows Authentication" in the video, but this will only work on Windows OS.
+
+Please continue to use SQL Authentication and provide a Username and Password that we used in the install video instead.
+
+
+If you used the same credentials as me in the install video, they will be as follows:
+
+UserName: sa
+
+Password: SQLConnect1
+
+
+For connection strings you will also need to set Trusted_Connection to false and supply a UserName and Password:
+
+
+Server=localhost;Database=DotNetCourseDatabase;Trusted_Connection=false;TrustServerCertificate=True;User Id=sa;Password=SQLConnect1;
+
+
+----------------------------------------------------------------------------------------------------------------
+
+https://github.com/DomTripodi93/DotNetAPICourse/tree/main/SQLSeed
+
+----------------------------------------------------------------------------------------
+
+DROP TABLE IF EXISTS TutorialAppSchema.Users;
+
+-- IF OBJECT_ID('TutorialAppSchema.Users') IS NOT NULL
+--     DROP TABLE TutorialAppSchema.Users;
+
+CREATE TABLE TutorialAppSchema.Users
+(
+	-- TableId INT IDENTITY (Starting, Increment by)
+    UserId INT IDENTITY(1, 1) PRIMARY KEY
+    , FirstName NVARCHAR(50)
+    , LastName NVARCHAR(50)
+    , Email NVARCHAR(50) UNIQUE
+    , Gender NVARCHAR(50)
+    , Active BIT
+);
+
+DROP TABLE IF EXISTS TutorialAppSchema.UserSalary;
+
+-- IF OBJECT_ID('TutorialAppSchema.UserSalary') IS NOT NULL
+--     DROP TABLE TutorialAppSchema.UserSalary;
+
+CREATE TABLE TutorialAppSchema.UserSalary
+(
+    UserId INT
+    , Salary DECIMAL(18, 4)
+);
+
+DROP TABLE IF EXISTS TutorialAppSchema.UserJobInfo;
+
+-- IF OBJECT_ID('TutorialAppSchema.UserJobInfo') IS NOT NULL
+--     DROP TABLE TutorialAppSchema.UserJobInfo;
+
+CREATE TABLE TutorialAppSchema.UserJobInfo
+(
+    UserId INT
+    , JobTitle NVARCHAR(50)
+    , Department NVARCHAR(50),
+);
+--------------------------------------------------------------------------------------------------
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\SQLSeed> dotnet run
+
+USE DotNetCourseDatabase;
+GO
+
+CREATE SCHEMA TutorialAppSchema
+GO
+
+
+SELECT  [UserId]
+      , [FirstName]
+      , [LastName]
+      , [Email]
+      , [Gender]
+      , [Active]
+   FROM  TutorialAppSchema.Users;
+
+SELECT  [UserId]
+      , [Salary]
+   FROM  TutorialAppSchema.UserSalary;
+
+SELECT  [UserId]
+       , [JobTitle]
+       , [Department]
+   FROM  TutorialAppSchema.UserJobInfo;
+   
+----------------------------------------------------------------------------------------------------------
+
 
 
 %--------------------------------------------- Section 5: Sql -----------------------------------------------------%
 
+USE DotNetCourseDatabase
+GO
 
+CREATE SCHEMA TutorialAppSchema
+GO
+
+CREATE TABLE TutorialAppSchema.Computer(
+	ComputerId INT IDENTITY(1,1) PRIMARY KEY,
+	Motherboard NVARCHAR(50),
+	CPUCores INT,
+	HasWifi BIT,
+	HasLTE BIT,
+	ReleaseDate DATE,
+	Price DECIMAL(18,4),
+	VideoCard NVARCHAR(50)
+);
+
+--------------------------------------------------------------
+
+
+USE DotNetCourseDatabase
+Go
+SELECT * FROM TutorialAppSchema.Computer
+
+--------------------------------------------------------------
+
+INSERT INTO TutorialAppSchema.Computer(
+	[Motherboard],
+	[CPUCores],
+	[HasWifi],
+	[HasLTE],
+	[ReleaseDate],
+	[Price],
+	[VideoCard] 
+) VALUES(
+		'test-Motherboard' ,
+		8,
+		1,
+		0,
+		'2024-02-01',
+		876.96,
+		'test-videocard'
+ )
+
+
+---------------------------------------------------------------
+
+
+DELETE FROM TutorialAppSchema.Computer WHERE ComputerId = 102
+
+
+UPDATE TutorialAppSchema.Computer  SET CPUCores = 6 WHERE ComputerId = 98
+
+UPDATE TutorialAppSchema.Computer SET CPUCores = 2 WHERE ReleaseDate < '2017-01-01'
+
+SELECT [ComputerId],
+[Motherboard],
+[CPUCores],
+[HasWifi],
+[HasLTE],
+[ReleaseDate],
+[Price],
+[VideoCard] FROM TutorialAppSchema.Computer
+-------------------------------------------------------------------
+SELECT [ComputerId],
+[Motherboard],
+ISNULL([CPUCores],4) AS CPUCores,
+[HasWifi],
+[HasLTE],
+[ReleaseDate],
+[Price],
+[VideoCard] FROM TutorialAppSchema.Computer
+
+-------------------------------------------------------------------
+SELECT [ComputerId],
+[Motherboard],
+ISNULL([CPUCores],4) AS CPUCores,
+[HasWifi],
+[HasLTE],
+[ReleaseDate],
+[Price],
+[VideoCard] FROM TutorialAppSchema.Computer ORDER BY  ReleaseDate  
+
+
+--------------------------------------------------------------------
+
+SELECT [ComputerId],
+[Motherboard],
+ISNULL([CPUCores],4) AS CPUCores,
+[HasWifi],
+[HasLTE],
+[ReleaseDate],
+[Price],
+[VideoCard] FROM TutorialAppSchema.Computer ORDER BY  ReleaseDate DESC
+
+----------------------------------------------- SQL - Intermediate ----------------------------------------------------------------
+
+USE DotNetCourseDatabase;
+GO
+
+SELECT  [UserId]
+      , [FirstName]
+      , [LastName] 
+      , [Email]
+      , [Gender]
+      , [Active]
+   FROM  TutorialAppSchema.Users AS Users;
+
+SELECT  [UserId]
+      , [Salary]
+   FROM  TutorialAppSchema.UserSalary;
+
+SELECT  [UserId]
+       , [JobTitle]
+       , [Department]
+   FROM  TutorialAppSchema.UserJobInfo;
+
+
+
+
+SELECT  [UserId]
+      , [FirstName] + ' '+ , [LastName] AS fullName, 
+      , [Email]
+      , [Gender]
+      , [Active]
+   FROM  TutorialAppSchema.Users AS Users;
+-------------------------------------------------------------------------------
 
 
 %--------------------------------------------- Section 6: API Basics -----------------------------------------------------%
 
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects> dotnet new webapi -n DotnetAPI
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> code .
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet run
+
+Building...
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5202
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+
+http://localhost:5202/weatherforecast
 
 
+http://localhost:5202/swagger/index.html
+
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet watch run
+
+
+http://localhost:5202/swagger/index.html
+
+## Custom Controller;
+
+re-build in console when using > dotnet watch run
+use command  = ctrl + R
+
+
+http://localhost:5202/User/test?testValue=%22testValue%22
+
+--------------------------------------------------------------------------------------------------
+
+In the next lecture we will be setting up our Launch Settings to default to HTTP instead of HTTPS, and to use Port 5000 instead of the randomly assigned port from generating the project.
+
+With .NET 8 you probably already know that the HTTPS redirect is not going to be an issue, but when we set the port to 5000, launchSettings.json looks a little bit different.
+
+Instead of a profile listed for the name of your project, you will see two profiles, "http" and "https".
+
+When we change the order of our two options, it will look like the "https" profile, but with the way .NET 8 is set up, we will also want to change the port in the default "http" profile.
+
+
+
+When all is said and done, your launchSettings.json for .NET Core 7 should look like the version below:
+
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:36431",
+      "sslPort": 44328
+    }
+  },
+  "profiles": {
+    "http": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "https": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
+
+-----------------------------------------------------------------------------------
+
+http://localhost:5000/swagger/index.html
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+InvariantGlobalization Bug
+Hello!
+
+With the release of .NET Core 8, a bug was introduced to the "webapi" template that causes issues when interacting with the database.
+
+Fortunately, this bug has been fixed in the source code for .NET Core, and it is only a matter of time until a new patch is released fixing the issue.
+
+
+In the meantime, you may experience the following error if you do not make a small adjustment to your .csproj file:
+
+
+
+Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+An unhandled exception has occurred while executing the request.
+System.Globalization.CultureNotFoundException: Only the invariant culture is supported in globalization-invariant mode
+
+
+To stop this from happening, or fix it if it is already happening to you, you will need to set the "InvariantGlobalization" setting in your .csproj file to "false",
+<InvariantGlobalization>false</InvariantGlobalization>:
+
+
+
+<Project Sdk="Microsoft.NET.Sdk.Web">
+ 
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>false</InvariantGlobalization>
+  </PropertyGroup>
+...
+
+
+With that out of the way, everything should work as expected!
+
+
+------------------------------------------------------------------------------------------------
+
+http://localhost:5000/swagger/index.html
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package Dapper
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.data.sqlclient
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.entityframeworkcore
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.entityframeworkcore.Relational
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.entityframeworkcore.sqlserver
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.Extensions.Configuration
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package microsoft.Extensions.Configuration.Json
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package Newtonsoft.Json
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet add package AutoMapper
+
+(base) PS D:\Udemy_Course\dotNet_With_SQL\projects\DotnetAPI> dotnet restore
+
+---------------- Notes ------------------------------------
+- .csproj file;
+
+<PropertyGroup>
+  <TargetFramework>net8.0</TargetFramework>
+  <ImplicitUsings>enable</ImplicitUsings>
+  <InvariantGlobalization>false</InvariantGlobalization>
+</PropertyGroup>
+
+
+---------------------------------------------------
+
+
+http://localhost:5000/swagger/index.html
+
+
+## DTO : (Data Transfer Object)
+
+## namaspace
+
+
+## 
+
+- DELETE FROM TutorialAppSchema.Users WHERE UserId = 1001
+
+- SELECT COUNT(*) FROM TutorialAppSchema.Users
+
+- SELECT * FROM TutorialAppSchema.Users WHERE UserId BETWEEN 495 and 505
+
+
+## Entity Framework Setup;
+
+git branch -M master
+git remote add origin https://github.com/jnybrahma/Dot_Net_API.git
+git push -u origin master
 
 %--------------------------------------------- Section 7: API - Intermediate -----------------------------------------------------%
 
